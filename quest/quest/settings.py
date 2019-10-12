@@ -113,3 +113,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = "/static/"
+
+LOGIN_URL = "grade:login"
+LOGIN_REDIRECT_URL = "grade:index"
+LOGOUT_REDIRECT_URL = "grade:index"
