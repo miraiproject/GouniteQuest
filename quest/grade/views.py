@@ -11,7 +11,8 @@ from grade.models import User
 
 
 def index(request):
-    return render(request, "grade/index.html")
+    users = User.objects.all()
+    return render(request, "grade/index.html", {'users': users})
 
 
 def signup(request):
@@ -48,4 +49,4 @@ def new_grade(request, user_id):
     else:
         form = GradeForm()
         return render(request, "grade/new_grade.html",
-            {"form": form, "user": user})
+                      {"form": form, "user": user})
