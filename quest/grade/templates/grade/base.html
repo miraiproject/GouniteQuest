@@ -1,0 +1,33 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>成績管理サイト</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    </head>
+    <body>
+        <header>
+            <h1><a href="{% url 'grade:index' %}">成績管理サイト</a></h1>
+
+            <div class="header-menu">
+                {% if request.user.is_authenticated %}
+                    {{ request.user.username }}でログイン中
+                    <a href="{% url 'grade:logout' %}">ログアウト</a>
+                {% else %}
+                    <a href="{% url 'grade:login' %}">ログイン</a>
+                    <a href="{% url 'grade:signup' %}">新規登録</a>
+                {% endif %}
+            </div>
+        </header>
+
+        <div>
+            {% for message in messages %}
+                <p class="message-success">{{ message }}</p>
+            {% endfor %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>
