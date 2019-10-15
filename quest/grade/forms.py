@@ -1,4 +1,5 @@
 from django.forms import ModelForm
+from grade.models import Board
 from grade.models import Grade
 from grade.models import Report
 from grade.models import ReportProblem
@@ -20,3 +21,8 @@ class ReportForm(ModelForm):
     class Meta:
         model = Report
         fields = ["report_file"]
+
+class BoardForm(ModelForm):
+    class Meta:
+        model = Board
+        fields = ['comment'] 
