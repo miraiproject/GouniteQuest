@@ -1,0 +1,20 @@
+{% extends 'grade/base.html' %}
+{% block content %}
+
+<div class="">
+    <h2>レポートを作成する</h2>
+
+    <form action="{% url 'grade:new_report_problem' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+        <label>タイトル</label>
+        {{ form.title }}
+        <br />
+
+        <label>内容</label>
+        {{ form.content }}
+        <br />
+
+        <button type="submit" class="">保存</button>
+    </form>
+</div>
+
+{% endblock %}

@@ -13,7 +13,7 @@ class Grade(models.Model):
         return self.user.username
 
 
-class Report(models.Model):
+class ReportProblem(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField(max_length=1000)
     teacher = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -24,9 +24,9 @@ class Report(models.Model):
         return self.title
 
 
-class SubmittedReport(models.Model):
-    submittion = models.FileField(upload_to='uploads/%Y/%m/%d/')
-    report = models.ForeignKey(Report, on_delete=models.CASCADE)
+class Report(models.Model):
+    report_file = models.FileField(upload_to='uploads/%Y/%m/%d/')
+    report_problem = models.ForeignKey(ReportProblem, on_delete=models.CASCADE)
     student = models.ForeignKey(User, on_delete=models.CASCADE)
     created_datetime = models.DateTimeField(auto_now_add=True)
 

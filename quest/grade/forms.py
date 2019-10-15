@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from grade.models import Grade
 from grade.models import Report
-from grade.models import SubmittedReport
+from grade.models import ReportProblem
 
 
 class GradeForm(ModelForm):
@@ -10,13 +10,13 @@ class GradeForm(ModelForm):
         fields = ["english", "math", "japanese"]
 
 
-class ReportForm(ModelForm):
+class ReportProblemForm(ModelForm):
     class Meta:
-        model = Report
+        model = ReportProblem
         fields = ["title", "content"]
 
 
-class SubmittedReportForm(ModelForm):
+class ReportForm(ModelForm):
     class Meta:
-        model = SubmittedReport
-        fields = ["submittion"]
+        model = Report
+        fields = ["report_file"]
