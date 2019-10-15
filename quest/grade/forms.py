@@ -19,4 +19,4 @@ class ReportForm(ModelForm):
 class SubmittedReportForm(ModelForm):
     class Meta:
         model = SubmittedReport
-        field = ["submittion"]
+        fields = ["submittion"]
