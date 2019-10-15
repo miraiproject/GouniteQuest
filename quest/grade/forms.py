@@ -2,7 +2,6 @@ from django.forms import ModelForm
 from .models import Grade, Board
 
 
-
 class GradeForm(ModelForm):
     class Meta:
         model = Grade
@@ -11,4 +10,4 @@ class GradeForm(ModelForm):
 class BoardForm(ModelForm):
     class Meta:
         model = Board
-        fields = ['comment', 'date']
+        fields = ['comment'] 

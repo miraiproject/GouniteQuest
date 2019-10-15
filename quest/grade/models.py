@@ -15,7 +15,7 @@ class Grade(models.Model):
 class Board(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     comment = models.CharField(max_length=200)
-    date = models.DateField()
+    date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.user.username
+        return self.user.username 
