@@ -22,3 +22,13 @@ class Report(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class SubmittedReport(models.Model):
+    submittion = models.FileField(upload_to='uploads/%Y/%m/%d/')
+    report = models.ForeignKey(Report, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_datetime = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.student.username
