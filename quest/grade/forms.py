@@ -1,7 +1,12 @@
 from django.forms import ModelForm
 from grade.models import Grade
 from grade.models import Report
+<<<<<<< HEAD
 from grade.models import ReportProblem
+=======
+from grade.models import SubmittedReport
+from grade.models import Board
+>>>>>>> ffa70ac4654a57248605e571438f2f9fad70374f
 
 
 class GradeForm(ModelForm):
@@ -18,5 +23,11 @@ class ReportProblemForm(ModelForm):
 
 class ReportForm(ModelForm):
     class Meta:
-        model = Report
-        fields = ["report_file"]
+        model = SubmittedReport
+        fields = ["submittion"]
+
+
+class BoardForm(ModelForm):
+    class Meta:
+        model = Board
+        fields = ['comment']

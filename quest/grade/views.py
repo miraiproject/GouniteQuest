@@ -8,8 +8,11 @@ from django.shortcuts import render
 from grade.forms import GradeForm
 from grade.forms import ReportForm
 from grade.forms import ReportProblemForm
+from grade.models import Board
 from grade.models import Report
 from grade.models import ReportProblem
+from grade.forms import BoardForm
+from grade.forms import GradeForm
 from grade.models import User
 
 
@@ -59,6 +62,7 @@ def new_grade(request, user_id):
         return render(request, "grade/new_grade.html",
                       {"form": form, "user": user})
 
+<<<<<<< HEAD
 
 def new_report_problem(request):
     if request.method == "POST":
@@ -88,3 +92,17 @@ def new_report(request, report_problem_id):
     else:
         form = ReportForm()
         return render(request, "grade/new_report.html", {"report_problem": report_problem, "form": form})
+=======
+def new_board(request):
+    if request.method == "POST":
+        form = BoardForm(request.POST)
+        if form.is_valid():
+            topic = form.save(commit=False)
+            topic.user = request.user
+            topic.save()
+            messages.success(request, "コメントを追加しました。")
+            return redirect("grade:new_board")
+    else:
+        form = BoardForm()
+        return render(request, "grade/new_board.html", {"form":form})
+>>>>>>> ffa70ac4654a57248605e571438f2f9fad70374f
