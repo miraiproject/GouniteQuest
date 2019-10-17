@@ -5,8 +5,8 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.shortcuts import render
-from grade.forms import GradeForm
-from grade.models import Grade
+from grade.forms import GradeForm, BoardForm
+from grade.models import Grade, Board
 from grade.models import User
 
 
@@ -50,3 +50,16 @@ def new_grade(request, user_id):
         form = GradeForm()
         return render(request, "grade/new_grade.html",
                       {"form": form, "user": user})
+
+def new_board(request):
+    if request.method == "POST":
+        form = BoardForm(request.POST)
+        if form.is_valid():
+            topic = form.save(commit=False)
+            topic.user = request.user
+            topic.save()
+            messages.success(request, "コメントを追加しました。")
+            return redirect("grade:new_board")
+    else:
+        form = BoardForm()
+        return render(request, "grade/new_board.html", {"form":form})
