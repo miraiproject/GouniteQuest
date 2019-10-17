@@ -22,8 +22,9 @@ class ReportForm(ModelForm):
         model = Report
         fields = ["report_file"]
 
-        
+
 class BoardForm(ModelForm):
     class Meta:
         model = Board
-        fields = ['comment'] 
+        fields = ['comment']
+

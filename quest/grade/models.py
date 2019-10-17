@@ -33,7 +33,7 @@ class Report(models.Model):
     def __str__(self):
         return self.student.username
 
-      
+
 class Board(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     comment = models.CharField(max_length=200)
@@ -41,3 +41,4 @@ class Board(models.Model):
 
     def __str__(self):
         return self.user.username 
+

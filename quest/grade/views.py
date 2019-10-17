@@ -115,6 +115,7 @@ def new_report(request, report_problem_id):
     return render(request, "grade/new_report.html", {"report_problem": report_problem, "form": form})
 
 
+
 def new_board(request):
     if request.method == "POST":
         form = BoardForm(request.POST)
@@ -126,4 +127,5 @@ def new_board(request):
             return redirect("grade:new_board")
     else:
         form = BoardForm()
-        return render(request, "grade/new_board.html", {"form":form})
+    return render(request, "grade/new_board.html", {"form": form})
+
