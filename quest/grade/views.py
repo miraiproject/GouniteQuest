@@ -10,6 +10,7 @@ from grade.forms import GradeForm
 from grade.forms import ReportForm
 from grade.forms import ReportProblemForm
 from grade.models import Board
+from grade.models import Grade
 from grade.models import Report
 from grade.models import ReportProblem
 from grade.models import User
@@ -58,8 +59,30 @@ def new_grade(request, user_id):
             return redirect("grade:index")
     else:
         form = GradeForm()
-        return render(request, "grade/new_grade.html",
-                      {"form": form, "user": user})
+    return render(request, "grade/new_grade.html",
+                  {"form": form, "user": user})
+
+
+def update_grade(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    grade = get_object_or_404(Grade, user=user)
+    if request.method == "POST":
+        form = GradeForm(request.POST, instance=grade)
+        if form.is_valid():
+            grade = form.save(commit=False)
+            grade.gpa = (grade.english + grade.math + grade.japanese) / 3
+            grade.save()
+            messages.success(request, "成績を保存しました")
+            return redirect("grade:index")
+    else:
+        form = GradeForm(instance=grade)
+    return render(request, "grade/update_grade.html",
+                  {"form": form, "user": user})
+
+
+def show_grade(request):
+    users = User.objects.all()
+    return render(request, "grade/show_grade.html", {"users": users})
 
 
 def new_report_problem(request):
@@ -73,7 +96,7 @@ def new_report_problem(request):
             return redirect("grade:index")
     else:
         form = ReportProblemForm()
-        return render(request, "grade/new_report_problem.html", {"form": form})
+    return render(request, "grade/new_report_problem.html", {"form": form})
 
 
 def new_report(request, report_problem_id):
@@ -89,7 +112,8 @@ def new_report(request, report_problem_id):
             return redirect("grade:index")
     else:
         form = ReportForm()
-        return render(request, "grade/new_report.html", {"report_problem": report_problem, "form": form})
+    return render(request, "grade/new_report.html", {"report_problem": report_problem, "form": form})
+
 
 
 def new_board(request):
@@ -103,5 +127,5 @@ def new_board(request):
             return redirect("grade:new_board")
     else:
         form = BoardForm()
-        return render(request, "grade/new_board.html", {"form": form})
+    return render(request, "grade/new_board.html", {"form": form})
 

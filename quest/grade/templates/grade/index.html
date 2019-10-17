@@ -1,18 +1,7 @@
 {% extends 'grade/base.html' %}
 {% block content %}
 
-<h2>ユーザー一覧</h2>
-
-{% for user in users %}
-    <div>
-        <span>名前：{{ user.username }}　</span>
-        <span>英語：{{ user.grade_set.last.english }}　</span>
-        <span>数学：{{ user.grade_set.last.math }}　</span>
-        <span>国語：{{ user.grade_set.last.japanese }}　</span>
-        <span>GPA：{{ user.grade_set.last.gpa }}　</span>
-        <a href="{% url 'grade:new_grade' user_id=user.id %}">成績をつける</a>
-    </div>
-{% endfor %}
+<a href="{% url 'grade:show_grade' %}">成績一覧</a>
 
 
 <h2>レポート課題一覧</h2>
