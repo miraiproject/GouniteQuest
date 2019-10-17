@@ -5,9 +5,11 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.shortcuts import render
+from grade.forms import BoardForm
 from grade.forms import GradeForm
 from grade.forms import ReportForm
 from grade.forms import ReportProblemForm
+from grade.models import Board
 from grade.models import Grade
 from grade.models import Report
 from grade.models import ReportProblem
@@ -111,3 +113,17 @@ def new_report(request, report_problem_id):
     else:
         form = ReportForm()
     return render(request, "grade/new_report.html", {"report_problem": report_problem, "form": form})
+
+
+def new_board(request):
+    if request.method == "POST":
+        form = BoardForm(request.POST)
+        if form.is_valid():
+            topic = form.save(commit=False)
+            topic.user = request.user
+            topic.save()
+            messages.success(request, "コメントを追加しました。")
+            return redirect("grade:new_board")
+    else:
+        form = BoardForm()
+        return render(request, "grade/new_board.html", {"form":form})
