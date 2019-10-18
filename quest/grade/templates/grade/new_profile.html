@@ -1,0 +1,13 @@
+<form
+  action="{% url 'grade:new_profile' %}"
+  method="POST"
+  enctype="multipart/form-data"
+>
+  {% csrf_token %}
+  <h1>{{ form.teacher }}様のプロフィール</h1>
+  <h2>プロフィール画像</h2>
+  {{ form.image }}
+  <h2>紹介文</h2>
+  <p>{{ form.introduction }}</p>
+  <button type="submit" class="">保存</button>
+</form>

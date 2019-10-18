@@ -40,5 +40,13 @@ class Board(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.user.username 
+        return self.user.username
 
+
+class Profile(models.Model):
+    teacher = models.ForeignKey(User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='photo/')
+    introduction = models.TextField(max_length=400)
+
+    def __str__(self):
+        return self.teacher.username

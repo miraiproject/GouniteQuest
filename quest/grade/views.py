@@ -9,10 +9,12 @@ from grade.forms import BoardForm
 from grade.forms import GradeForm
 from grade.forms import ReportForm
 from grade.forms import ReportProblemForm
+from grade.forms import ProfileForm
 from grade.models import Board
 from grade.models import Grade
 from grade.models import Report
 from grade.models import ReportProblem
+from grade.models import Profile
 from grade.models import User
 
 
@@ -36,7 +38,7 @@ def signup(request):
             new_user = authenticate(
                 username=input_username,
                 password=input_password
-                )
+            )
             if new_user is not None:
                 login(request, new_user)
                 messages.success(request, "ユーザー登録が完了しました")
@@ -115,7 +117,6 @@ def new_report(request, report_problem_id):
     return render(request, "grade/new_report.html", {"report_problem": report_problem, "form": form})
 
 
-
 def new_board(request):
     if request.method == "POST":
         form = BoardForm(request.POST)
@@ -129,3 +130,16 @@ def new_board(request):
         form = BoardForm()
     return render(request, "grade/new_board.html", {"form": form})
 
+
+def new_profile(request):
+    if request.method == "POST":
+        form = ProfileForm(request.POST)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.teacher = request.user
+            profile.save()
+            messages.success(request, "編集が完了しました。")
+            return redirect("grade:index")
+    else:
+        form = ProfileForm()
+    return render(request, "grade/new_profile.html", {"form": form})

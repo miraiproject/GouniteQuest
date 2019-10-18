@@ -3,6 +3,7 @@ from grade.models import Board
 from grade.models import Grade
 from grade.models import Report
 from grade.models import ReportProblem
+from grade.models import Profile
 
 
 class GradeForm(ModelForm):
@@ -28,3 +29,8 @@ class BoardForm(ModelForm):
         model = Board
         fields = ['comment']
 
+
+class ProfileForm(ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['teacher', 'image', 'introduction']
