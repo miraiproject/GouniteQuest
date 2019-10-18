@@ -19,6 +19,7 @@ $ git clone git@github.com:miraiproject/GouniteQuest.git
 $ cd GouniteQuest
 $ mkvirtualenv quest
 $ pip install -r requirements.txt
+$ pip install Pillow
 ```
 
 ## 
