@@ -41,4 +41,12 @@ class Board(models.Model):
 
     def __str__(self):
         return self.comment
+  
 
+class Profile(models.Model):
+    teacher = models.ForeignKey(User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='photo/')
+    introduction = models.TextField(max_length=400)
+
+    def __str__(self):
+        return self.teacher.username
