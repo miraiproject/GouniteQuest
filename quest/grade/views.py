@@ -131,3 +131,7 @@ def new_board(request):
         boards = Board.objects.all()
     return render(request, "grade/new_board.html", {"form": form, "boards": boards})
 
+def delete_board(request):
+    board = Board.objects.filter(user = request.user)
+    board.delete()
+    return redirect("grade:new_board")
