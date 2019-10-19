@@ -12,6 +12,14 @@
 {{board.comment}}
 </br>
 {{board.date}}
+</br>
+written by {{board.user}}
+</br>
+</br>
 {% endfor %}
+
+<form action="{% url 'grade:delete_board' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+  <button type="submit" class="">自分の書き込みを全削除</button>
+</form>
 
 {% endblock %}
