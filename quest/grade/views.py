@@ -123,12 +123,14 @@ def new_board(request):
         if form.is_valid():
             topic = form.save(commit=False)
             topic.user = request.user
+            boards = Board.objects.all()
             topic.save()
             messages.success(request, "コメントを追加しました。")
             return redirect("grade:new_board")
     else:
         form = BoardForm()
-    return render(request, "grade/new_board.html", {"form": form})
+        boards = Board.objects.all()
+    return render(request, "grade/new_board.html", {"form": form, "boards": boards})
 
 
 def new_profile(request):

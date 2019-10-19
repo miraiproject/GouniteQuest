@@ -1,5 +1,17 @@
+{% extends 'grade/base.html' %}
+{% block content %}
+
+
 <form action="{% url 'grade:new_board' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
     <label>コメント</label>
     {{ form.comment }}
       <button type="submit" class="">保存</button>
-  </form>
+</form>
+
+{% for board in boards %}
+{{board.comment}}
+</br>
+{{board.date}}
+{% endfor %}
+
+{% endblock %}
