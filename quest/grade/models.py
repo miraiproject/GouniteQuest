@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+import os
 
 
 class Grade(models.Model):
@@ -41,12 +42,16 @@ class Board(models.Model):
 
     def __str__(self):
         return self.comment
-  
+
+
+def get_upload_to(instance, filename):
+    return os.path.join(str(instance.teacher), filename)
+
 
 class Profile(models.Model):
     teacher = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='photo/')
+    image = models.ImageField(upload_to=get_upload_to)
     introduction = models.TextField(max_length=400)
 
     def __str__(self):
-        return self.teacher.username
+        return self.introduction
