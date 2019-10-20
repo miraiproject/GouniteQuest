@@ -6,7 +6,7 @@
   enctype="multipart/form-data"
 >
   {% csrf_token %}
-  <h1>{{ request.user }}様のプロフィール</h1>
+  <h1>{{ user.username }}様のプロフィール</h1>
   <h2>プロフィール画像</h2>
   {{ form.image }}
   <h2>自己紹介</h2>

@@ -139,15 +139,16 @@ def delete_board(request):
     return redirect("grade:new_board")
 
 
-def new_profile(request):
+def new_profile(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    photos = Profile.objects.all()
     if request.method == "POST":
         form = ProfileForm(request.POST)
         if form.is_valid():
             profile = form.save(commit=False)
-            profile.teacher = request.user
             profile.save()
             messages.success(request, "編集が完了しました。")
             return redirect("grade:index")
     else:
         form = ProfileForm()
-    return render(request, "grade/new_profile.html", {"form": form})
+    return render(request, "grade/new_profile.html", {"form": form, "user": user, "photos": photos})

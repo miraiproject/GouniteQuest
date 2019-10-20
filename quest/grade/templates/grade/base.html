@@ -26,7 +26,15 @@
       </div>
     </header>
     {% if request.user.is_authenticated %}
-    <a href="{% url 'grade:new_profile' %}">プロフィール変更</a>
+      {% for photo in photos %}
+      {% if request.user.id == photo.teacher.id %}
+        <h2>{{ photo.teacher }}</h2>
+        <img src="{{ photo.image.url }}" class="photo-img" />
+        <p>{{ photo.introduction }}</p>
+      {% endif %}
+      {% endfor %} 
+
+    <a href="{% url 'grade:new_profile' user_id=user.id %}">プロフィール変更</a>
     {% endif %}
   </br>
     <div>
