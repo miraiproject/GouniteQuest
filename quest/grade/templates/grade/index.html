@@ -5,23 +5,25 @@
 
 
 <h2>レポート課題一覧</h2>
-<a href="{% url 'grade:new_report_problem' %}">レポート課題を作成する</a>
-
-{% for report_problem in report_problems %}
-    <div>
-        <span>課題作成者：{{ report_problem.teacher }}　</span>
-        <span>タイトル：{{ report_problem.title }}　</span>
-        <a href="{% url 'grade:new_report' report_problem_id=report_problem.id %}">課題を提出する</a>
-    </div>
-{% endfor %}
+<a href="{% url 'grade:new_report_problem' %}"><button type=button class="btn btn-primary">レポート課題を作成する</button></a>
+<ul class="list-group">
+    {% for report_problem in report_problems %}
+        <li class="list-group-item">
+            <span>課題作成者：{{ report_problem.teacher }}　</span>
+            <span>タイトル：{{ report_problem.title }}　</span>
+            <a href="{% url 'grade:new_report' report_problem_id=report_problem.id %}">課題を提出する</a>
+        </li>
+    {% endfor %}
+</ul>
 
 <h2>提出されたレポート一覧</h2>
-{% for report in reports %}
-    <div>
-        <span>提出者：{{ report.student }}　</span>
-        <span>課題タイトル：{{ report.report_problem.title }}　</span>
-        <span>ファイル：{{ report.report_file }}　</span>
-    </div>
-{% endfor %}
-
+<ul class="list-group">
+    {% for report in reports %}
+        <li class="list-group-item">
+            <span>提出者：{{ report.student }}　</span>
+            <span>課題タイトル：{{ report.report_problem.title }}　</span>
+            <span>ファイル：{{ report.report_file }}　</span>
+        </li>
+    {% endfor %}
+</ul>
 {% endblock %}

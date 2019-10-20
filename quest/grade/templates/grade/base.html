@@ -1,31 +1,41 @@
 {% load static %}
 
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8" />
     <title>成績管理サイト</title>
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{% static 'css/style.css' %}"
-    />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
   </head>
   <body>
-    <header>
-      <h1><a href="{% url 'grade:index' %}">成績管理サイト</a></h1>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="{% url 'grade:index' %}">成績管理サイト</a>
 
-      <div class="header-menu">
+      {% if request.user.is_authenticated %}
+        <span class="nav-text">{{ request.user.username }}でログイン中</span>
+      {% endif %}
+
+      <ul class="navbar-nav mr-auto">
         {% if request.user.is_authenticated %}
-        {{ request.user.username }}でログイン中
-        <a href="{% url 'grade:logout' %}">ログアウト</a>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'grade:logout' %}">ログアウト</a>
+          </li>
         {% else %}
-        <a href="{% url 'grade:login' %}">ログイン</a>
-        <a href="{% url 'grade:signup' %}">新規登録</a>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'grade:login' %}">ログイン</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'grade:signup' %}">新規登録</a>
+          </li>
         {% endif %}
-      </div>
-    </header>
-    {% if request.user.is_authenticated %}
+      </ul>
+    </nav>
+
+    <div class="container">
+      {% if request.user.is_authenticated %}
       {% for photo in photos %}
       {% if request.user.id == photo.teacher.id %}
         <h2>{{ photo.teacher }}</h2>
@@ -36,12 +46,15 @@
 
     <a href="{% url 'grade:new_profile' user_id=user.id %}">プロフィール変更</a>
     {% endif %}
-  </br>
-    <div>
-       {% for message in messages %}
-      <p class="message-success">{{ message }}</p>
-      {% endfor %} {% block content %}{% endblock %}
+      </br>
+
+      {% for message in messages %}
+        <p class="message-success">{{ message }}</p>
+      {% endfor %}
+
+      {% block content %}{% endblock %}
+
+      <h1><a href="{% url 'grade:new_board' %}">掲示板</a></h1>
     </div>
-    <h1><a href="{% url 'grade:new_board' %}">掲示板</a></h1>
   </body>
 </html>
