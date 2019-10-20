@@ -1,15 +1,17 @@
 {% extends 'grade/base.html' %}
+{% load widget_tweaks %}
 {% block content %}
 
 <div class="">
     <h2>レポートを提出する</h2>
 
     <form action="{% url 'grade:new_report' report_problem_id=1 %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
-        <label>ファイル</label>
-        {{ form.report_file }}
-        <br />
+        <div class="form-group">
+            <label>ファイル</label>
+            {{ form.report_file|add_class:"form-control-file" }}
+        </div>
 
-        <button type="submit" class="">保存</button>
+        <button type="submit" class="btn btn-primary">保存</button>
     </form>
 </div>
 

@@ -8,16 +8,16 @@
         {% if form.errors %}
             <p class="error">ユーザー名かパスワードが間違っています。もう一度入力してください。</p>
         {% endif %}
+        <div class="form-group">
+            <label>ユーザー名</label>
+            <input name="username" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>パスワード</label>
+            <input type="password" name="password" class="form-control">
+        </div>
 
-        <label>ユーザー名</label>
-        <input name="username">
-        <br>
-
-        <label>パスワード</label>
-        <input type="password" name="password">
-        <br>
-
-        <input type="submit" value="ログイン">
+        <input type="submit" value="ログイン" class="btn btn-primary">
     </form>
 </div>
 
