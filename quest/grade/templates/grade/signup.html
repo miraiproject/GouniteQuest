@@ -1,25 +1,30 @@
 {% extends 'grade/base.html' %}
+{% load widget_tweaks %}
+
 {% block content %}
 
 <h2>ユーザー登録</h2>
 
 <form method="post" action="{% url 'grade:signup' %}">{% csrf_token %}
-    <label>ユーザー名</label>
-    {{ form.username }}
-    {{ form.username.errors }}
-    <br>
+    <div class="form-group">
+        <label>ユーザー名</label>
+        {{ form.username|add_class:"form-control" }}
+        {{ form.username.errors }}
+    </div>
 
-    <label>パスワード</label>
-    {{ form.password1 }}
-    {{ form.password1.errors }}
-    <br>
+    <div class="form-group">
+        <label>パスワード</label>
+        {{ form.password1|add_class:"form-control" }}
+        {{ form.password1.errors }}
+    </div>
 
-    <label>パスワード(確認)</label>
-    {{ form.password2 }}
-    {{ form.password2.errors }}
-    <br>
+    <div class="form-group">
+        <label>パスワード(確認)</label>
+        {{ form.password2|add_class:"form-control" }}
+        {{ form.password2.errors }}
+    </div>
 
-    <input  class="submit" type="submit" value="登録">
+    <input type="submit" value="登録" class="btn btn-primary">
 </form>
 
 {% endblock %}
