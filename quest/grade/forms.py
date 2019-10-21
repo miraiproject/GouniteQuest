@@ -33,4 +33,4 @@ class BoardForm(ModelForm):
 class ProfileForm(ModelForm):
     class Meta:
         model = Profile
-        fields = ['teacher', 'image', 'introduction']
+        fields = ['image', 'introduction']

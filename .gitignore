@@ -1,2 +1,4 @@
 __pycache__/
 uploads/
+db.sqlite3
+media/

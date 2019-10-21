@@ -22,10 +22,12 @@ def index(request):
     users = User.objects.all()
     report_problems = ReportProblem.objects.all()
     reports = Report.objects.all()
+    photos = Profile.objects.all()
     return render(request, "grade/index.html",
                   {'users': users,
                    'report_problems': report_problems,
-                   'reports': reports})
+                   'reports': reports,
+                   'photos': photos})
 
 
 def signup(request):
@@ -139,16 +141,16 @@ def delete_board(request):
     return redirect("grade:new_board")
 
 
-def new_profile(request, user_id):
-    user = get_object_or_404(User, id=user_id)
+def new_profile(request):
     photos = Profile.objects.all()
     if request.method == "POST":
-        form = ProfileForm(request.POST)
+        form = ProfileForm(request.POST, request.FILES)
         if form.is_valid():
             profile = form.save(commit=False)
+            profile.teacher = request.user
             profile.save()
             messages.success(request, "編集が完了しました。")
             return redirect("grade:index")
     else:
         form = ProfileForm()
-    return render(request, "grade/new_profile.html", {"form": form, "user": user, "photos": photos})
+    return render(request, "grade/new_profile.html", {"form": form, "photos": photos})

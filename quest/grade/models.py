@@ -50,6 +50,7 @@ def get_upload_to(instance, filename):
 
 class Profile(models.Model):
     teacher = models.ForeignKey(User, on_delete=models.CASCADE)
+    # image = models.FileField(upload_to='uploads/%Y/%m/%d/')
     image = models.ImageField(upload_to=get_upload_to)
     introduction = models.TextField(max_length=400)
 
