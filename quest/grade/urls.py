@@ -24,7 +24,7 @@ urlpatterns = [
     path('delete_board/', views.delete_board, name='delete_board'),
 
 
-    path('new_profile/<int:user_id>', views.new_profile, name='new_profile'),
+    path('new_profile/', views.new_profile, name='new_profile'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,
