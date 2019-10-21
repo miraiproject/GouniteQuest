@@ -1,6 +1,17 @@
 {% extends 'grade/base.html' %}
 {% block content %}
 
+{% if request.user.is_authenticated %}
+{% for photo in photos %}
+  {% if request.user.id == photo.teacher.id %}
+    <h2>{{ photo.teacher }}</h2>
+    <img src="{{ photo.image.url }}" class="photo-img" />
+    <p>{{ photo.introduction }}</p>
+    <br />
+  {% endif %}
+{% endfor %}
+{% endif %}
+
 <a href="{% url 'grade:show_grade' %}">成績一覧</a>
 
 

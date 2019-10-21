@@ -1,0 +1,13 @@
+{% extends 'grade/base.html' %}
+{% block content %}
+<h1>{{ request.user }}様のプロフィール</h1>
+
+<form action="{% url 'grade:update_profile' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+  <h2>プロフィール画像</h2>
+  {{ form.image }}
+  <h2>自己紹介</h2>
+  <p>{{ form.introduction }}</p>
+  <button type="submit" class="">保存</button>
+</form>
+
+{% endblock %}
