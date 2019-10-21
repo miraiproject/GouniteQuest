@@ -31,22 +31,19 @@
             <a class="nav-link" href="{% url 'grade:signup' %}">新規登録</a>
           </li>
         {% endif %}
+        {% if request.user.is_authenticated %}
+          <li class="nav-item">
+        {% if user.profile_set.first %}
+            <a class="nav-link" href="{% url 'grade:update_profile' %}">プロフィールを編集する</a>
+        {% else %}
+            <a class="nav-link" href="{% url 'grade:new_profile' %}">プロフィールを作成する</a>
+        {% endif %}
+          </li>
+        {% endif %}
       </ul>
     </nav>
 
     <div class="container">
-      {% if request.user.is_authenticated %}
-        {% for photo in photos %}
-          {% if request.user.id == photo.teacher.id %}
-            <h2>{{ photo.teacher }}</h2>
-            <img src="{{ photo.image.url }}" class="photo-img" />
-            <p>{{ photo.introduction }}</p>
-          {% endif %}
-        {% endfor %}
-        <a href="{% url 'grade:new_profile' %}">プロフィール変更</a>
-      {% endif %}
-      </br>
-
       {% for message in messages %}
         <p class="message-success">{{ message }}</p>
       {% endfor %}

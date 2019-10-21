@@ -149,8 +149,22 @@ def new_profile(request):
             profile = form.save(commit=False)
             profile.teacher = request.user
             profile.save()
-            messages.success(request, "編集が完了しました。")
             return redirect("grade:index")
     else:
         form = ProfileForm()
     return render(request, "grade/new_profile.html", {"form": form, "photos": photos})
+
+
+def update_profile(request):
+    profileUser = get_object_or_404(Profile, teacher=request.user)
+    photos = Profile.objects.all()
+    if request.method == "POST":
+        form = ProfileForm(request.POST, request.FILES, instance=profileUser)
+        if form.is_valid():
+            profile = form.save(commit=False)
+            profile.teacher = request.user
+            profile.save()
+            return redirect("grade:index")
+    else:
+        form = ProfileForm(instance=profileUser)
+    return render(request, "grade/update_profile.html", {"form": form, "photos": photos})
