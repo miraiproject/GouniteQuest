@@ -124,3 +124,5 @@ MEDIA_URL = '/media/'
 LOGIN_URL = "grade:login"
 LOGIN_REDIRECT_URL = "grade:index"
 LOGOUT_REDIRECT_URL = "grade:index"
+
+AUTH_USER_MODEL = 'grade.CustomUser'

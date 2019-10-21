@@ -1,5 +1,5 @@
 from django.contrib.auth import authenticate
-from django.contrib.auth.forms import UserCreationForm
+from grade.forms import CustomUserCreationForm
 from django.contrib.auth import login
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
@@ -15,11 +15,11 @@ from grade.models import Grade
 from grade.models import Report
 from grade.models import ReportProblem
 from grade.models import Profile
-from grade.models import User
+from grade.models import CustomUser
 
 
 def index(request):
-    users = User.objects.all()
+    users = CustomUser.objects.all()
     report_problems = ReportProblem.objects.all()
     reports = Report.objects.all()
     photos = Profile.objects.all()
@@ -32,7 +32,7 @@ def index(request):
 
 def signup(request):
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             new_user = form.save()
             input_username = form.cleaned_data["username"]
@@ -46,12 +46,12 @@ def signup(request):
                 messages.success(request, "ユーザー登録が完了しました")
                 return redirect("grade:index")
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, "grade/signup.html", {"form": form})
 
 
 def new_grade(request, user_id):
-    user = get_object_or_404(User, id=user_id)
+    user = get_object_or_404(CustomUser, id=user_id)
     if request.method == "POST":
         form = GradeForm(request.POST)
         if form.is_valid():
@@ -68,7 +68,7 @@ def new_grade(request, user_id):
 
 
 def update_grade(request, user_id):
-    user = get_object_or_404(User, id=user_id)
+    user = get_object_or_404(CustomUser, id=user_id)
     grade = get_object_or_404(Grade, user=user)
     if request.method == "POST":
         form = GradeForm(request.POST, instance=grade)
@@ -85,7 +85,7 @@ def update_grade(request, user_id):
 
 
 def show_grade(request):
-    users = User.objects.all()
+    users = CustomUser.objects.all()
     return render(request, "grade/show_grade.html", {"users": users})
 
 
