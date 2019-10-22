@@ -2,20 +2,9 @@ from django.contrib.auth import authenticate
 from grade.forms import CustomUserCreationForm
 from django.contrib.auth import login
 from django.contrib import messages
-from django.shortcuts import get_object_or_404
-from django.shortcuts import redirect
-from django.shortcuts import render
-from grade.forms import BoardForm
-from grade.forms import GradeForm
-from grade.forms import ReportForm
-from grade.forms import ReportProblemForm
-from grade.forms import ProfileForm
-from grade.models import Board
-from grade.models import Grade
-from grade.models import Report
-from grade.models import ReportProblem
-from grade.models import Profile
-from grade.models import CustomUser
+from django.shortcuts import get_object_or_404, redirect, render
+from grade.forms import BoardForm, GradeForm, ReportForm, ReportProblemForm, ProfileForm
+from grade.models import Board, Grade, Report, ReportProblem, Profile, CustomUser
 from django.contrib.auth.decorators import login_required
 from django.db.models import Avg
 
