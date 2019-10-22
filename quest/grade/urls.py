@@ -18,6 +18,13 @@ urlpatterns = [
 
     path('new_report_problem/', views.new_report_problem,
          name='new_report_problem'),
+    path('update_report_problem/<int:report_problem_id>/',
+         views.update_report_problem,
+         name='update_report_problem'),
+    path('delete_report_problem/<int:report_problem_id>/',
+         views.delete_report_problem,
+         name='delete_report_problem'),
+
     path('new_report/<int:report_problem_id>/',
          views.new_report, name='new_report'),
     path('new_board/', views.new_board, name='new_board'),

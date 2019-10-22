@@ -28,12 +28,42 @@
 
 <h2 class="mt-5">レポート課題</h2>
 <table class="table table-striped">
-    <th>タイトル</th><th>課題作成者</th><th>提出</th>
-    {% for report_problem in report_problems %}
+    <th>タイトル</th><th>課題作成者</th><th>締め切り</th><th>提出</th>
+    {% for not_submitted_problem in not_submitted_problems %}
         <tr>
-            <td>{{ report_problem.title }}
-            <td>{{ report_problem.teacher }}</td>
-            <td><a href="{% url 'grade:new_report' report_problem_id=report_problem.id %}">課題を提出する</a></td>
+            <td>
+                <a href="{% url 'grade:new_report' report_problem_id=not_submitted_problem.id %}">
+                    {{ not_submitted_problem.title }}
+                </a>
+            </td>
+            <td>{{ not_submitted_problem.teacher }}</td>
+            <td>{{ not_submitted_problem.deadline }}</td>
+            <td>未提出</td>
+        </tr>
+    {% endfor %}
+    {% for submitted_problem in submitted_problems %}
+        <tr>
+            <td>
+                <a href="{% url 'grade:new_report' report_problem_id=submitted_problem.id %}">
+                    {{ submitted_problem.title }}
+                </a>
+            </td>
+            <td>{{ submitted_problem.teacher }}</td>
+            <td>{{ submitted_problem.deadline }}</td>
+            <td>提出済み</td>
+        </tr>
+    {% endfor %}
+</table>
+
+<h2 class="mt-5">提出したレポート</h2>
+<table class="table table-striped">
+    <th>提出者</th><th>課題タイトル</th><th>ファイル</th><th>提出日時</th>
+    {% for report in reports %}
+        <tr>
+            <td>{{ report.student }}</td>
+            <td>{{ report.report_problem.title }}</td>
+            <td><a href="{{ report.report_file.url }}">{{ report.filename }}</a></td>
+            <td>{{ report.report_problem.created_datetime }}</td>
         </tr>
     {% endfor %}
 </table>
