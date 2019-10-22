@@ -1,0 +1,43 @@
+{% extends 'grade/base.html' %}
+{% block content %}
+
+<h1 class="mt-2">生徒ページ</h1>
+
+{% if request.user.is_authenticated %}
+    {% for photo in photos %}
+        {% if request.user.id == photo.teacher.id %}
+            <h2>{{ photo.teacher }}</h2>
+            <img src="{{ photo.image.url }}" class="photo-img" />
+            <p>{{ photo.introduction }}</p>
+            <br />
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<h2 class="mt-5">成績</h2>
+<table class="table table-striped">
+    <th>名前</th><th>英語</th><th>数学</th><th>国語</th><th>GPA</th>
+    <tr>
+        <td>{{ request.user.username }}</td>
+        <td>{{ grade.english }}</td>
+        <td>{{ grade.math }}</td>
+        <td>{{ grade.japanese }}</td>
+        <td>{{ grade.gpa }}</td>
+    </tr>
+</table>
+
+<h2 class="mt-5">レポート課題</h2>
+<table class="table table-striped">
+    <th>タイトル</th><th>課題作成者</th><th>提出</th>
+    {% for report_problem in report_problems %}
+        <tr>
+            <td>{{ report_problem.title }}
+            <td>{{ report_problem.teacher }}</td>
+            <td><a href="{% url 'grade:new_report' report_problem_id=report_problem.id %}">課題を提出する</a></td>
+        </tr>
+    {% endfor %}
+</table>
+
+<h2 class="mt-5"><a href="{% url 'grade:new_board' %}">掲示板</a></h2>
+
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'grade/base.html' %}
+{% block content %}
+
+<h1 class="mt-2">先生ページ</h1>
+
+{% if request.user.is_authenticated %}
+    {% for photo in photos %}
+        {% if request.user.id == photo.teacher.id %}
+            <h2>{{ photo.teacher }}</h2>
+            <img src="{{ photo.image.url }}" class="photo-img" />
+            <p>{{ photo.introduction }}</p>
+            <br />
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+<h2 class="mt-5">生徒の成績</h2>
+<a href="{% url 'grade:show_grade' %}">
+    <span class="h4 mt-1">生徒の成績はこちら</span>
+    {% comment %} <button type=button class="btn btn-primary mt-1">生徒の成績はこちら</button> {% endcomment %}
+</a>
+
+<h2 class="mt-5">レポート課題</h2>
+<a href="{% url 'grade:new_report_problem' %}" class="">
+    <button type=button class="btn btn-primary mt-1 mb-4">レポート課題を作成する</button>
+</a>
+<table class="table table-striped">
+    <th>タイトル</th><th>課題作成者</th>
+    {% for report_problem in report_problems %}
+        <tr>
+            <td>{{ report_problem.title }}
+            <td>{{ report_problem.teacher }}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+<h2 class="mt-5">提出されたレポート</h2>
+<table class="table table-striped">
+    <th>提出者</th><th>課題タイトル</th><th>ファイル</th>
+    {% for report in reports %}
+        <tr>
+            <td>提出者：{{ report.student }}</td>
+            <td>課題タイトル：{{ report.report_problem.title }}</td>
+            <td>ファイル：{{ report.report_file }}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

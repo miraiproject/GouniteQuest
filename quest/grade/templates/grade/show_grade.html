@@ -1,21 +1,31 @@
 {% extends 'grade/base.html' %}
 {% block content %}
 
-<h2>成績一覧</h2>
+<h2>平均点</h2>
+<table class="table table-striped">
+    <th>英語の平均点</th><th>数学の平均点</th><th>国語の平均点</th>
+    <tr>
+        <td>{{ avg_english }}</td>
+        <td>{{ avg_math }}</td>
+        <td>{{ avg_japanese }}</td>
+    </tr>
+</table>
+
+<h2>生徒の成績</h2>
 <table class="table table-striped">
     <th>名前</th><th>英語</th><th>数学</th><th>国語</th><th>GPA</th><th>成績をつける</th>
-    {% for user in users %}
+    {% for student in students %}
         <tr>
-            <td>{{ user.username }}</td>
-            <td>{{ user.grade_set.last.english }}</td>
-            <td>{{ user.grade_set.last.math }}</td>
-            <td>{{ user.grade_set.last.japanese }}</td>
-            <td>{{ user.grade_set.last.gpa }}</td>
+            <td>{{ student.username }}</td>
+            <td>{{ student.grade_set.last.english }}</td>
+            <td>{{ student.grade_set.last.math }}</td>
+            <td>{{ student.grade_set.last.japanese }}</td>
+            <td>{{ student.grade_set.last.gpa }}</td>
             <td>
-                {% if user.grade_set.first %}
-                    <a href="{% url 'grade:update_grade' user_id=user.id %}">成績を変更する</a>
+                {% if student.grade_set.first %}
+                    <a href="{% url 'grade:update_grade' user_id=student.id %}">成績を変更する</a>
                 {% else %}
-                    <a href="{% url 'grade:new_grade' user_id=user.id %}">成績をつける</a>
+                    <a href="{% url 'grade:new_grade' user_id=student.id %}">成績をつける</a>
                 {% endif %}
             </td>
         </tr>

@@ -45,12 +45,10 @@
 
     <div class="container">
       {% for message in messages %}
-        <p class="message-success">{{ message }}</p>
+        <p class="alert alert-success %>">{{ message }}</p>
       {% endfor %}
 
       {% block content %}{% endblock %}
-
-      <h1><a href="{% url 'grade:new_board' %}">掲示板</a></h1>
     </div>
   </body>
 </html>
