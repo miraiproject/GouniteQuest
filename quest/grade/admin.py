@@ -1,11 +1,7 @@
 from django.contrib import admin
-from grade.models import Grade
-from grade.models import Report
-from grade.models import ReportProblem
-from grade.models import Profile
+from .models import Grade, Report, ReportProblem, Profile, CustomUser
 from django.contrib.auth.admin import UserAdmin
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import CustomUser
 
 
 class GradeAdmin(admin.ModelAdmin):

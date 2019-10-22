@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractUser, User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 import os
 
@@ -67,6 +67,3 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.introduction
-
-
-
