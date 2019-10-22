@@ -41,10 +41,10 @@ class ProfileForm(ModelForm):
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm):
         model = CustomUser
-        fields = ('username','teacher')
+        fields = ('username', 'teacher')
 
 
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
-        fields = ('username','teacher')
+        fields = ('username', 'teacher')

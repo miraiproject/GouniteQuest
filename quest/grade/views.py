@@ -16,18 +16,26 @@ from grade.models import Report
 from grade.models import ReportProblem
 from grade.models import Profile
 from grade.models import CustomUser
+from django.contrib.auth.decorators import login_required
+from django.db.models import Avg
 
 
+@login_required
 def index(request):
-    users = CustomUser.objects.all()
     report_problems = ReportProblem.objects.all()
-    reports = Report.objects.all()
     photos = Profile.objects.all()
-    return render(request, "grade/index.html",
-                  {'users': users,
-                   'report_problems': report_problems,
-                   'reports': reports,
-                   'photos': photos})
+    if request.user.teacher:
+        reports = Report.objects.all()
+        return render(request, "grade/teacher_home.html",
+                      {'report_problems': report_problems,
+                       'reports': reports,
+                       'photos': photos})
+    else:
+        grade = Grade.objects.filter(user=request.user).first()
+        return render(request, "grade/student_home.html",
+                      {'report_problems': report_problems,
+                       'grade': grade,
+                       'photos': photos})
 
 
 def signup(request):
@@ -85,8 +93,15 @@ def update_grade(request, user_id):
 
 
 def show_grade(request):
-    users = CustomUser.objects.all()
-    return render(request, "grade/show_grade.html", {"users": users})
+    students = CustomUser.objects.filter(teacher=False)
+    avg_english = Grade.objects.aggregate(Avg('english'))
+    avg_math = Grade.objects.aggregate(Avg('math'))
+    avg_japanese = Grade.objects.aggregate(Avg('japanese'))
+    return render(request, "grade/show_grade.html",
+                  {"students": students,
+                   "avg_english": avg_english["english__avg"],
+                   "avg_math": avg_math["math__avg"],
+                   "avg_japanese": avg_japanese["japanese__avg"]})
 
 
 def new_report_problem(request):

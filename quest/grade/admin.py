@@ -4,7 +4,6 @@ from grade.models import Report
 from grade.models import ReportProblem
 from grade.models import Profile
 from django.contrib.auth.admin import UserAdmin
-
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import CustomUser
 
@@ -29,12 +28,6 @@ class ProfileAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'teacher')
 
 
-admin.site.register(Grade, GradeAdmin)
-admin.site.register(ReportProblem, ReportProblemAdmin)
-admin.site.register(Report, ReportAdmin)
-admin.site.register(Profile, ProfileAdmin)
-
-
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
@@ -50,4 +43,9 @@ class CustomUserAdmin(UserAdmin):
         }),
     )
 
+
+admin.site.register(Grade, GradeAdmin)
+admin.site.register(ReportProblem, ReportProblemAdmin)
+admin.site.register(Report, ReportAdmin)
+admin.site.register(Profile, ProfileAdmin)
 admin.site.register(CustomUser, CustomUserAdmin)
