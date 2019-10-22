@@ -2,10 +2,19 @@
 {% load widget_tweaks %}
 {% block content %}
 
-<div class="">
+<h2 class="mt-4">タイトル</h2>
+{{ report_problem.title }}
+
+<h2 class="mt-4">課題内容</h2>
+<p>{{ report_problem.content }}</p>
+
+<h2 class="mt-4">締め切り</h2>
+<p>{{ report_problem.deadline }}</p>
+
+{% if not request.user.teacher %}
     <h2>レポートを提出する</h2>
 
-    <form action="{% url 'grade:new_report' report_problem_id=1 %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+    <form action="{% url 'grade:new_report' report_problem_id=report_problem.id %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
         <div class="form-group">
             <label>ファイル</label>
             {{ form.report_file|add_class:"form-control-file" }}
@@ -13,6 +22,11 @@
 
         <button type="submit" class="btn btn-primary">保存</button>
     </form>
-</div>
+{% endif %}
+
+{% if report_problem.teacher == request.user %}
+    <a href="{% url 'grade:update_report_problem' report_problem_id=report_problem.id %}">編集</a>
+    <a href="{% url 'grade:delete_report_problem' report_problem_id=report_problem.id %}">削除</a>
+{% endif %}
 
 {% endblock %}
