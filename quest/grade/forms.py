@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import ModelForm
-from grade.models import Board, Grade, Report, ReportProblem, Profile, CustomUser
+from .models import Board, Grade, Report, ReportProblem, Profile, CustomUser
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 

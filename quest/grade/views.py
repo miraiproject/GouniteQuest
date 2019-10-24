@@ -9,33 +9,42 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def index(request):
     photos = Profile.objects.all()
+
+    # teacher's page
     if request.user.is_teacher:
         report_problems = ReportProblem.objects.order_by('deadline')
         reports = Report.objects.order_by('-created_datetime')
-        return render(request, "grade/teacher_home.html",
-                      {'report_problems': report_problems,
-                       'reports': reports,
-                       'photos': photos})
+        return render(request, "grade/teacher_home.html", {
+            'report_problems': report_problems,
+            'reports': reports,
+            'photos': photos
+        })
+
+    # student's page
     else:
-        report_id = Report.objects.values_list(
-                        "report_problem_id", flat=True
-                    ).filter(student=request.user)
+        # ReportProblems' id that the student have already submitted a report
+        submitted_problem_id = Report.objects.values_list(
+            "report_problem_id", flat=True).filter(student=request.user)
+
+        # ReportProblems that the student have already submitted a report
         submitted_problems = ReportProblem.objects.filter(
-                                 id__in=report_id
-                             ).order_by('deadline')
+            id__in=submitted_problem_id).order_by('deadline')
+
+        # ReportProblems that the student have not submitted a report yet
         not_submitted_problems = ReportProblem.objects.exclude(
-                                     id__in=report_id
-                                 ).order_by('deadline')
+            id__in=submitted_problem_id).order_by('deadline')
+
         grade = Grade.objects.filter(user=request.user).first()
-        reports = Report.objects.filter(
-                      student=request.user
-                  ).order_by('-created_datetime')
-        return render(request, "grade/student_home.html",
-                      {'grade': grade,
-                       'reports': reports,
-                       'submitted_problems': submitted_problems,
-                       'not_submitted_problems': not_submitted_problems,
-                       'photos': photos})
+        reports = Report.objects.filter(student=request.user).order_by(
+            '-created_datetime')
+
+        return render(request, "grade/student_home.html", {
+            'grade': grade,
+            'reports': reports,
+            'submitted_problems': submitted_problems,
+            'not_submitted_problems': not_submitted_problems,
+            'photos': photos
+        })
 
 
 def signup(request):

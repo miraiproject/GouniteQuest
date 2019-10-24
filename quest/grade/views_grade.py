@@ -3,8 +3,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .forms import GradeForm
 from .models import Grade, CustomUser
 from django.db.models import Avg
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def new_grade(request, user_id):
     if not request.user.is_teacher:
         return redirect("grade:index")
@@ -24,6 +26,7 @@ def new_grade(request, user_id):
                   {"form": form, "user": user})
 
 
+@login_required
 def update_grade(request, user_id):
     if not request.user.is_teacher:
         return redirect("grade:index")
@@ -43,15 +46,20 @@ def update_grade(request, user_id):
                   {"form": form, "user": user})
 
 
+@login_required
 def show_grade(request):
     if not request.user.is_teacher:
         return redirect("grade:index")
     students = CustomUser.objects.filter(is_teacher=False)
+
+    # average score of each subject
     avg_english = Grade.objects.aggregate(Avg('english'))
     avg_math = Grade.objects.aggregate(Avg('math'))
     avg_japanese = Grade.objects.aggregate(Avg('japanese'))
-    return render(request, "grade/show_grade.html",
-                  {"students": students,
-                   "avg_english": avg_english["english__avg"],
-                   "avg_math": avg_math["math__avg"],
-                   "avg_japanese": avg_japanese["japanese__avg"]})
+
+    return render(request, "grade/show_grade.html", {
+        "students": students,
+        "avg_english": avg_english["english__avg"],
+        "avg_math": avg_math["math__avg"],
+        "avg_japanese": avg_japanese["japanese__avg"]
+    })
