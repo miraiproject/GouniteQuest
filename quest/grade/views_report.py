@@ -2,8 +2,10 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import ReportForm, ReportProblemForm
 from .models import ReportProblem
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def new_report_problem(request):
     if not request.user.is_teacher:
         return redirect("grade:index")
@@ -20,6 +22,7 @@ def new_report_problem(request):
     return render(request, "grade/new_report_problem.html", {"form": form})
 
 
+@login_required
 def update_report_problem(request, report_problem_id):
     report_problem = get_object_or_404(ReportProblem, id=report_problem_id)
     if request.user != report_problem.teacher:
@@ -38,6 +41,7 @@ def update_report_problem(request, report_problem_id):
                   {"form": form, "report_problem": report_problem})
 
 
+@login_required
 def delete_report_problem(request, report_problem_id):
     report_problem = get_object_or_404(ReportProblem, id=report_problem_id)
     if request.user != report_problem.teacher:
@@ -47,6 +51,7 @@ def delete_report_problem(request, report_problem_id):
     return redirect("grade:index")
 
 
+@login_required
 def new_report(request, report_problem_id):
     report_problem = get_object_or_404(ReportProblem, id=report_problem_id)
     if request.method == "POST":
