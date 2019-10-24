@@ -9,9 +9,9 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def index(request):
     photos = Profile.objects.all()
-    if request.user.teacher:
-        report_problems = ReportProblem.objects.all()
-        reports = Report.objects.all()
+    if request.user.is_teacher:
+        report_problems = ReportProblem.objects.order_by('deadline')
+        reports = Report.objects.order_by('-created_datetime')
         return render(request, "grade/teacher_home.html",
                       {'report_problems': report_problems,
                        'reports': reports,
@@ -20,12 +20,16 @@ def index(request):
         report_id = Report.objects.values_list(
                         "report_problem_id", flat=True
                     ).filter(student=request.user)
-        submitted_problems = ReportProblem.objects.filter(id__in=report_id)
+        submitted_problems = ReportProblem.objects.filter(
+                                 id__in=report_id
+                             ).order_by('deadline')
         not_submitted_problems = ReportProblem.objects.exclude(
                                      id__in=report_id
-                                 )
+                                 ).order_by('deadline')
         grade = Grade.objects.filter(user=request.user).first()
-        reports = Report.objects.filter(student=request.user)
+        reports = Report.objects.filter(
+                      student=request.user
+                  ).order_by('-created_datetime')
         return render(request, "grade/student_home.html",
                       {'grade': grade,
                        'reports': reports,

@@ -6,7 +6,7 @@ from django.db.models import Avg
 
 
 def new_grade(request, user_id):
-    if not request.user.teacher:
+    if not request.user.is_teacher:
         return redirect("grade:index")
     user = get_object_or_404(CustomUser, id=user_id)
     if request.method == "POST":
@@ -25,7 +25,7 @@ def new_grade(request, user_id):
 
 
 def update_grade(request, user_id):
-    if not request.user.teacher:
+    if not request.user.is_teacher:
         return redirect("grade:index")
     user = get_object_or_404(CustomUser, id=user_id)
     grade = get_object_or_404(Grade, user=user)
@@ -44,9 +44,9 @@ def update_grade(request, user_id):
 
 
 def show_grade(request):
-    if not request.user.teacher:
+    if not request.user.is_teacher:
         return redirect("grade:index")
-    students = CustomUser.objects.filter(teacher=False)
+    students = CustomUser.objects.filter(is_teacher=False)
     avg_english = Grade.objects.aggregate(Avg('english'))
     avg_math = Grade.objects.aggregate(Avg('math'))
     avg_japanese = Grade.objects.aggregate(Avg('japanese'))

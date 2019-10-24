@@ -5,7 +5,7 @@ from .models import ReportProblem
 
 
 def new_report_problem(request):
-    if not request.user.teacher:
+    if not request.user.is_teacher:
         return redirect("grade:index")
     if request.method == "POST":
         form = ReportProblemForm(request.POST)
@@ -50,7 +50,7 @@ def delete_report_problem(request, report_problem_id):
 def new_report(request, report_problem_id):
     report_problem = get_object_or_404(ReportProblem, id=report_problem_id)
     if request.method == "POST":
-        if request.user.teacher:
+        if request.user.is_teacher:
             return redirect("grade:index")
         form = ReportForm(request.POST, request.FILES)
         if form.is_valid():
