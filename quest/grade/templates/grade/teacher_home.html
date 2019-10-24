@@ -48,7 +48,7 @@
             <td>{{ report.student }}</td>
             <td>{{ report.report_problem.title }}</td>
             <td><a href="{{ report.report_file.url }}">{{ report.filename }}</a></td>
-            <td>{{ report.report_problem.created_datetime }}</td>
+            <td>{{ report.created_datetime }}</td>
         </tr>
     {% endfor %}
 </table>

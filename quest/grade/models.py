@@ -1,10 +1,10 @@
-from django.contrib.auth.models import AbstractUser, User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 import os
 
 
 class CustomUser(AbstractUser):
-    teacher = models.BooleanField(default=False)
+    is_teacher = models.BooleanField(default=False)
 
     def __str__(self):
         return self.username
@@ -67,6 +67,3 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.introduction
-
-
-

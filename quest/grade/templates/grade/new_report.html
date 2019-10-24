@@ -11,7 +11,7 @@
 <h2 class="mt-4">締め切り</h2>
 <p>{{ report_problem.deadline }}</p>
 
-{% if not request.user.teacher %}
+{% if not request.user.is_teacher %}
     <h2>レポートを提出する</h2>
 
     <form action="{% url 'grade:new_report' report_problem_id=report_problem.id %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
