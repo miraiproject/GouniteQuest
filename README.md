@@ -220,4 +220,10 @@ update_profile.html
 保存後、編集した内容は、index.htmlの部分に表示される。
 
 ## 掲示板ページ
-new_board.html
+new_board.html  
+  
+生徒のみアクセス可能。  
+  
+コメント、記入日時、記入者を表示する。  
+  
+自分の書き込みを全削除する機能がある。
