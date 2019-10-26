@@ -1,13 +1,18 @@
 {% extends 'grade/base.html' %}
+{% load widget_tweaks %}
 {% block content %}
-<h1>{{ request.user }}様のプロフィール</h1>
+<h1 class="mt-4 mb-4">{{ request.user }}様のプロフィール</h1>
 
 <form action="{% url 'grade:update_profile' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
-  <h2>プロフィール画像</h2>
-  {{ form.image }}
-  <h2>自己紹介</h2>
-  <p>{{ form.introduction }}</p>
-  <button type="submit" class="">保存</button>
+  <div class="form-group">
+    <label>プロフィール画像</label></br>
+    {{ form.image }}
+  </div>
+  <div class="form-group">
+    <label class="mt-3">自己紹介</label>
+    {{ form.introduction|add_class:"form-control" }}
+  </div>
+  <button type="submit" class="btn btn-primary">保存</button>
 </form>
 
 {% endblock %}
