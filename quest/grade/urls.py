@@ -3,6 +3,8 @@ from . import views
 from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework import routers
+from .views import BoardViewSet
 
 app_name = 'grade'
 urlpatterns = [
@@ -21,7 +23,7 @@ urlpatterns = [
     path('new_report/<int:report_problem_id>/',
          views.new_report, name='new_report'),
     path('new_board/', views.new_board, name='new_board'),
-    path('delete_board/', views.delete_board, name='delete_board'),
+    path('delete_board/<int:board_id>', views.delete_board, name='delete_board'),
 
 
     path('new_profile/', views.new_profile, name='new_profile'),
@@ -30,3 +32,6 @@ urlpatterns = [
 
 urlpatterns += static(settings.MEDIA_URL,
                       document_root=settings.MEDIA_ROOT)
+
+router = routers.DefaultRouter()
+router.register(r'boards', BoardViewSet)

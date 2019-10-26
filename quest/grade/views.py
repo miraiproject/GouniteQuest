@@ -1,23 +1,14 @@
-from django.contrib.auth import authenticate
-from grade.forms import CustomUserCreationForm
-from django.contrib.auth import login
+from django.contrib.auth import authenticate, login
 from django.contrib import messages
-from django.shortcuts import get_object_or_404
-from django.shortcuts import redirect
-from django.shortcuts import render
-from grade.forms import BoardForm
-from grade.forms import GradeForm
-from grade.forms import ReportForm
-from grade.forms import ReportProblemForm
-from grade.forms import ProfileForm
-from grade.models import Board
-from grade.models import Grade
-from grade.models import Report
-from grade.models import ReportProblem
-from grade.models import Profile
-from grade.models import CustomUser
+from django.shortcuts import get_object_or_404, redirect, render
+from grade.forms import BoardForm, GradeForm, ReportForm, ReportProblemForm,ProfileForm,CustomUserCreationForm
+from grade.models import Board, Grade, Report, ReportProblem,Profile,CustomUser
 from django.contrib.auth.decorators import login_required
 from django.db.models import Avg
+import django_filters
+from rest_framework import viewsets, filters
+from .models import Board
+from .serializers import BoardSerializer
 
 
 @login_required
@@ -150,9 +141,11 @@ def new_board(request):
     return render(request, "grade/new_board.html", {"form": form, "boards": boards})
 
 
-def delete_board(request):
-    board = Board.objects.filter(user=request.user)
-    board.delete()
+def delete_board(request, board_id):
+    board = get_object_or_404(Board, id=board_id)
+    if board.user == request.user:
+        board.delete()
+
     return redirect("grade:new_board")
 
 
@@ -183,3 +176,8 @@ def update_profile(request):
     else:
         form = ProfileForm(instance=profileUser)
     return render(request, "grade/update_profile.html", {"form": form, "photos": photos})
+
+
+class BoardViewSet(viewsets.ModelViewSet):
+    queryset = Board.objects.all()
+    serializer_class = BoardSerializer

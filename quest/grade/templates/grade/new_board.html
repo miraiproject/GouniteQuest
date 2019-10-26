@@ -2,10 +2,10 @@
 {% block content %}
 
 
-<form action="{% url 'grade:new_board' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+<form action="{% url 'grade:new_board' %}" method="POST" enctype="multipart/form-data" class="form-group">{% csrf_token %}
     <label>コメント</label>
     {{ form.comment }}
-      <button type="submit" class="">保存</button>
+    <button type="submit" class="btn btn-primary">保存</button>
 </form>
 
 {% for board in boards %}
@@ -16,10 +16,12 @@
 written by {{board.user}}
 </br>
 </br>
+{% if board.user == request.user %}
+<form action="{% url 'grade:delete_board' board_id=board.id %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+  <button type="submit" class="">削除</button>
+</form>
+{% endif %}
 {% endfor %}
 
-<form action="{% url 'grade:delete_board' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
-  <button type="submit" class="">自分の書き込みを全削除</button>
-</form>
 
 {% endblock %}
