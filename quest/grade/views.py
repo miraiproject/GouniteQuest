@@ -82,13 +82,13 @@ def new_board(request):
         if form.is_valid():
             topic = form.save(commit=False)
             topic.user = request.user
-            boards = Board.objects.all()
+            boards = Board.objects.order_by('-date')
             topic.save()
             messages.success(request, "コメントを追加しました。")
             return redirect("grade:new_board")
     else:
         form = BoardForm()
-        boards = Board.objects.all()
+        boards = Board.objects.order_by('-date')
     return render(request, "grade/new_board.html",
                   {"form": form, "boards": boards})
 
@@ -120,7 +120,7 @@ def new_profile(request):
 @login_required
 def update_profile(request):
     profileUser = get_object_or_404(Profile, teacher=request.user)
-    photos = Profile.objects.all()
+    profileDate = Profile.objects.all()
     if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES, instance=profileUser)
         if form.is_valid():
@@ -130,7 +130,7 @@ def update_profile(request):
             return redirect("grade:index")
     else:
         form = ProfileForm(instance=profileUser)
-    return render(request, "grade/update_profile.html", {"form": form, "photos": photos})
+    return render(request, "grade/update_profile.html", {"form": form, "profileDate": profileDate})
 
 
 class BoardViewSet(viewsets.ModelViewSet):
