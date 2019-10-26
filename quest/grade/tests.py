@@ -1,9 +1,9 @@
 from django.urls import reverse, resolve
 from django.test import Client, TestCase
-from .views import signup, index
+from .views import signup, index, new_profile
 from .views_grade import new_grade, update_grade, show_grade
 from .views_report import new_report_problem, update_report_problem, new_report
-from .models import CustomUser, Grade, ReportProblem
+from .models import CustomUser, Grade, ReportProblem, Profile
 
 
 def create_client_and_teacher_and_student(self):
@@ -166,6 +166,21 @@ class NewReportTests(TestCase):
         view = resolve('/new_report/%d/' % self.report_problem.id)
         self.assertEqual(view.func, new_report)
 
+
+class NewProfileTests(TestCase):
+
+    def setUp(self):
+        create_client_and_teacher_and_student(self)
+        self.client.force_login(self.teacher)
+
+    def test_new_profile_view_status_code(self):
+        url = reverse('grade:new_profile')
+        test_logged_in_user_can_access(self, url)
+
+    def test_new_profile_url_resolves_new_profile_view(self):
+        view = resolve('/new_profile/')
+        self.assertEqual(view.func, new_profile)
+        
 
 class CustomUserModelTest(TestCase):
 
