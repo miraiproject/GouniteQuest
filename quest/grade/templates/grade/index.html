@@ -2,11 +2,11 @@
 {% block content %}
 
 {% if request.user.is_authenticated %}
-{% for photo in photos %}
-  {% if request.user.id == photo.teacher.id %}
-    <h2>{{ photo.teacher }}</h2>
-    <img src="{{ photo.image.url }}" class="photo-img" />
-    <p>{{ photo.introduction }}</p>
+{% for profile in profileDate %}
+  {% if request.user.id == profile.teacher.id %}
+    <h2>{{ profile.teacher }}</h2>
+    <img src="{{ profile.image.url }}" class="photo-img" />
+    <p>{{ profile.introduction }}</p>
     <br />
   {% endif %}
 {% endfor %}

@@ -120,7 +120,7 @@ def new_profile(request):
 @login_required
 def update_profile(request):
     profileUser = get_object_or_404(Profile, teacher=request.user)
-    photos = Profile.objects.all()
+    profileDate = Profile.objects.all()
     if request.method == "POST":
         form = ProfileForm(request.POST, request.FILES, instance=profileUser)
         if form.is_valid():
@@ -130,7 +130,7 @@ def update_profile(request):
             return redirect("grade:index")
     else:
         form = ProfileForm(instance=profileUser)
-    return render(request, "grade/update_profile.html", {"form": form, "photos": photos})
+    return render(request, "grade/update_profile.html", {"form": form, "profileDate": profileDate})
 
 
 class BoardViewSet(viewsets.ModelViewSet):
