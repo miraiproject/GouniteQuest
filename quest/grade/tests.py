@@ -14,6 +14,7 @@ def create_client_and_teacher_and_student(self):
 
 def test_only_teacher_can_access(self, url):
     # teacher -> 200
+    self.client.force_login(self.teacher)
     response = self.client.get(url)
     self.assertEqual(response.status_code, 200)
 
@@ -30,6 +31,7 @@ def test_only_teacher_can_access(self, url):
 
 def test_logged_in_user_can_access(self, url):
     # teacher -> 200
+    self.client.force_login(self.teacher)
     response = self.client.get(url)
     self.assertEqual(response.status_code, 200)
 
@@ -45,6 +47,7 @@ def test_logged_in_user_can_access(self, url):
 
 
 class SignUpTests(TestCase):
+
     def test_signup_view_status_code(self):
         url = reverse('grade:signup')
         response = self.client.get(url)
@@ -59,7 +62,6 @@ class IndexTests(TestCase):
 
     def setUp(self):
         create_client_and_teacher_and_student(self)
-        self.client.force_login(self.teacher)
 
     def test_index_view_status_code(self):
         url = reverse('grade:index')
@@ -74,14 +76,13 @@ class NewGradeTests(TestCase):
 
     def setUp(self):
         create_client_and_teacher_and_student(self)
-        self.client.force_login(self.teacher)
 
     def test_new_grade_view_status_code(self):
-        url = reverse('grade:new_grade', args=[1])
+        url = reverse('grade:new_grade', args=[self.student.id])
         test_only_teacher_can_access(self, url)
 
     def test_new_grade_url_resolves_new_grade_view(self):
-        view = resolve('/new_grade/1/')
+        view = resolve('/new_grade/%d/' % self.student.id)
         self.assertEqual(view.func, new_grade)
 
 
@@ -89,7 +90,6 @@ class UpdateGradeTests(TestCase):
 
     def setUp(self):
         create_client_and_teacher_and_student(self)
-        self.client.force_login(self.teacher)
         self.grade = Grade.objects.create(
             english=36, math=24, japanese=12, gpa=24, user=self.student
         )
@@ -107,7 +107,6 @@ class ShowGradeTests(TestCase):
 
     def setUp(self):
         create_client_and_teacher_and_student(self)
-        self.client.force_login(self.teacher)
 
     def test_show_grade_view_status_code(self):
         url = reverse('grade:show_grade')
@@ -122,7 +121,6 @@ class NewReportProblemTests(TestCase):
 
     def setUp(self):
         create_client_and_teacher_and_student(self)
-        self.client.force_login(self.teacher)
 
     def test_new_report_problem_view_status_code(self):
         url = reverse('grade:new_report_problem')
@@ -137,7 +135,6 @@ class UpdateReportProblemTests(TestCase):
 
     def setUp(self):
         create_client_and_teacher_and_student(self)
-        self.client.force_login(self.teacher)
         self.report_problem = ReportProblem.objects.create(
             title='title', content='content', teacher=self.teacher
         )
@@ -157,7 +154,6 @@ class NewReportTests(TestCase):
 
     def setUp(self):
         create_client_and_teacher_and_student(self)
-        self.client.force_login(self.student)
         self.report_problem = ReportProblem.objects.create(
             title='title', content='content', teacher=self.teacher
         )
@@ -169,3 +165,18 @@ class NewReportTests(TestCase):
     def test_new_report_url_resolves_new_report_view(self):
         view = resolve('/new_report/%d/' % self.report_problem.id)
         self.assertEqual(view.func, new_report)
+
+
+class CustomUserModelTest(TestCase):
+
+    def test_culumn(self):
+        user = CustomUser.objects.create(
+            username='name',
+            email="test@exmaple.com"
+        )
+        self.assertEqual(user.username, 'name')
+        self.assertEqual(user.email, "test@exmaple.com")
+        self.assertEqual(str(user), user.username)
+        self.assertFalse(user.is_teacher)
+        user.is_teacher = True
+        self.assertTrue(user.is_teacher)

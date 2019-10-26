@@ -2,3 +2,5 @@ Django
 Pillow
 django-bootstrap4
 django-widgets-improved
+djangorestframework
+django-filter

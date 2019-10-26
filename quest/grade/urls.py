@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_views
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
-from .views import BoardViewSet
+from .views import BoardViewSet, GradeViewSet
 
 app_name = 'grade'
 urlpatterns = [
@@ -45,3 +45,4 @@ urlpatterns += static(settings.MEDIA_URL,
 
 router = routers.DefaultRouter()
 router.register(r'boards', BoardViewSet)
+router.register(r'grades', GradeViewSet)
