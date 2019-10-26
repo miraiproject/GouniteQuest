@@ -57,10 +57,9 @@
 
 <h2 class="mt-5">提出したレポート</h2>
 <table class="table table-striped">
-    <th>提出者</th><th>課題タイトル</th><th>ファイル</th><th>提出日時</th>
+    <th>課題タイトル</th><th>ファイル</th><th>提出日時</th>
     {% for report in reports %}
         <tr>
-            <td>{{ report.student }}</td>
             <td>{{ report.report_problem.title }}</td>
             <td><a href="{{ report.report_file.url }}">{{ report.filename }}</a></td>
             <td>{{ report.created_datetime }}</td>

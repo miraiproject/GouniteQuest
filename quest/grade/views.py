@@ -1,6 +1,14 @@
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
+from grade.forms import BoardForm, GradeForm, ReportForm, ReportProblemForm,ProfileForm,CustomUserCreationForm
+from grade.models import Board, Grade, Report, ReportProblem,Profile,CustomUser
+from django.contrib.auth.decorators import login_required
+from django.db.models import Avg
+import django_filters
+from rest_framework import viewsets, filters
+from .models import Board
+from .serializers import BoardSerializer, GradeSerializer
 from .forms import BoardForm, ProfileForm, CustomUserCreationForm
 from .models import Board, Grade, Report, ReportProblem, Profile
 from django.contrib.auth.decorators import login_required
@@ -86,9 +94,10 @@ def new_board(request):
 
 
 @login_required
-def delete_board(request):
-    board = Board.objects.filter(user=request.user)
-    board.delete()
+def delete_board(request, board_id):
+    board = get_object_or_404(Board, id=board_id)
+    if board.user == request.user:
+        board.delete()
     return redirect("grade:new_board")
 
 
@@ -121,5 +130,15 @@ def update_profile(request):
             return redirect("grade:index")
     else:
         form = ProfileForm(instance=profileUser)
-    return render(request, "grade/update_profile.html",
-                  {"form": form, "photos": photos})
+    return render(request, "grade/update_profile.html", {"form": form, "photos": photos})
+
+
+class BoardViewSet(viewsets.ModelViewSet):
+    queryset = Board.objects.all()
+    serializer_class = BoardSerializer
+
+
+class GradeViewSet(viewsets.ModelViewSet):
+    queryset = Grade.objects.all()
+    serializer_class = GradeSerializer
+
