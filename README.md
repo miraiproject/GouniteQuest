@@ -232,5 +232,3 @@ new_board.html
 http://127.0.0.1:8000/api/boards/  
   
 掲示板のコメントのAPIを取得する。
-
-new_profile.html
