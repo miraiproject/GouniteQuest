@@ -67,6 +67,7 @@ def signup(request):
     return render(request, "grade/signup.html", {"form": form})
 
 
+@login_required
 def new_board(request):
     if request.method == "POST":
         form = BoardForm(request.POST)
@@ -84,12 +85,14 @@ def new_board(request):
                   {"form": form, "boards": boards})
 
 
+@login_required
 def delete_board(request):
     board = Board.objects.filter(user=request.user)
     board.delete()
     return redirect("grade:new_board")
 
 
+@login_required
 def new_profile(request):
     photos = Profile.objects.all()
     if request.method == "POST":
@@ -105,6 +108,7 @@ def new_profile(request):
                   {"form": form, "photos": photos})
 
 
+@login_required
 def update_profile(request):
     profileUser = get_object_or_404(Profile, teacher=request.user)
     photos = Profile.objects.all()
