@@ -1,29 +1,28 @@
 {% extends 'grade/base.html' %}
+{% load widget_tweaks %}
 {% block content %}
 
-<div class="form-group">
-<form action="{% url 'grade:new_board' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
-    <label>コメント</label>
-    {{ form.comment }}
-    <button type="submit" class="btn btn-primary">投稿</button>
+<h2 class="mt-4 mb-4">コメント</h2>
+<form action="{% url 'grade:new_board' %}" method="POST" enctype="multipart/form-data" class="form-group mb-4">{% csrf_token %}
+  <div class="form-group">
+      <label>コメント</label>
+      {{ form.comment|add_class:"form-control" }}
+  </div>
+  <button type="submit" class="btn btn-primary">保存</button>
 </form>
 </div>
 
 {% for board in boards %}
-<div class="form-group">
-{{board.user}}
-</div>
-<div class="form-group">
-{{board.comment}}
-</div>
-<div class="form-group">
-{{board.date}}
-</div>
-{% if board.user == request.user %}
-<form action="{% url 'grade:delete_board' board_id=board.id %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
-  <button type="submit" class="btn btn-primary">削除</button>
-</form>
-{% endif %}
+  <div class="border-bottom mb-3 pb-3 overflow-hidden">
+    <div class="">{{board.comment}}</div>
+    <span class="text-black-50">written by {{board.user}}</span>
+    <span class="text-black-50 ">{{board.date}}</span>
+    {% if board.user == request.user %}
+    <div class="float-right">
+      <a href="{% url 'grade:delete_board' board_id=board.id %}">削除</a>
+    </div>
+    {% endif %}
+  </div>
 {% endfor %}
 
 
