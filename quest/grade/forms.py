@@ -1,11 +1,7 @@
+from django import forms
 from django.forms import ModelForm
-from grade.models import Board
-from grade.models import Grade
-from grade.models import Report
-from grade.models import ReportProblem
-from grade.models import Profile
+from .models import Board, Grade, Report, ReportProblem, Profile, CustomUser
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import CustomUser
 
 
 class GradeForm(ModelForm):
@@ -15,9 +11,16 @@ class GradeForm(ModelForm):
 
 
 class ReportProblemForm(ModelForm):
+    deadline = forms.DateTimeField(
+       label='締め切り',
+       required=True,
+       widget=forms.DateTimeInput(attrs={"type": "datetime-local"}),
+       input_formats=['%Y-%m-%dT%H:%M']
+    )
+
     class Meta:
         model = ReportProblem
-        fields = ["title", "content"]
+        fields = ["title", "content", "deadline"]
 
 
 class ReportForm(ModelForm):
@@ -41,10 +44,10 @@ class ProfileForm(ModelForm):
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm):
         model = CustomUser
-        fields = ('username', 'teacher')
+        fields = ('username', 'is_teacher')
 
 
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
-        fields = ('username', 'teacher')
+        fields = ('username', 'is_teacher')

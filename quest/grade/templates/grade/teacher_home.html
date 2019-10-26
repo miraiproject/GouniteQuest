@@ -25,23 +25,30 @@
     <button type=button class="btn btn-primary mt-1 mb-4">レポート課題を作成する</button>
 </a>
 <table class="table table-striped">
-    <th>タイトル</th><th>課題作成者</th>
+    <th>タイトル</th><th>課題作成者</th><th>締め切り</th><th>提出数</th>
     {% for report_problem in report_problems %}
         <tr>
-            <td>{{ report_problem.title }}
+            <td>
+                <a href="{% url 'grade:new_report' report_problem_id=report_problem.id %}">
+                    {{ report_problem.title }}
+                </a>
+            </td>
             <td>{{ report_problem.teacher }}</td>
+            <td>{{ report_problem.deadline }}</td>
+            <td>{{ report_problem.report_set.count }}</td>
         </tr>
     {% endfor %}
 </table>
 
 <h2 class="mt-5">提出されたレポート</h2>
 <table class="table table-striped">
-    <th>提出者</th><th>課題タイトル</th><th>ファイル</th>
+    <th>提出者</th><th>課題タイトル</th><th>ファイル</th><th>提出日時</th>
     {% for report in reports %}
         <tr>
-            <td>提出者：{{ report.student }}</td>
-            <td>課題タイトル：{{ report.report_problem.title }}</td>
-            <td>ファイル：{{ report.report_file }}</td>
+            <td>{{ report.student }}</td>
+            <td>{{ report.report_problem.title }}</td>
+            <td><a href="{{ report.report_file.url }}">{{ report.filename }}</a></td>
+            <td>{{ report.created_datetime }}</td>
         </tr>
     {% endfor %}
 </table>

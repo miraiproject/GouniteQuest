@@ -1,11 +1,10 @@
 from django.contrib.auth.models import AbstractUser
-from django.contrib.auth.models import User
 from django.db import models
 import os
 
 
 class CustomUser(AbstractUser):
-    teacher = models.BooleanField(default=False)
+    is_teacher = models.BooleanField(default=False)
 
     def __str__(self):
         return self.username
@@ -26,6 +25,7 @@ class ReportProblem(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField(max_length=1000)
     teacher = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    deadline = models.DateTimeField(null=True)
     created_datetime = models.DateTimeField(auto_now_add=True)
     updated_datetime = models.DateTimeField(auto_now=True)
 
@@ -38,6 +38,10 @@ class Report(models.Model):
     report_problem = models.ForeignKey(ReportProblem, on_delete=models.CASCADE)
     student = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     created_datetime = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def filename(self):
+        return os.path.basename(self.report_file.name)
 
     def __str__(self):
         return self.student.username

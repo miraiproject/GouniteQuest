@@ -9,24 +9,51 @@ import django_filters
 from rest_framework import viewsets, filters
 from .models import Board
 from .serializers import BoardSerializer
+from .forms import BoardForm, ProfileForm, CustomUserCreationForm
+from .models import Board, Grade, Report, ReportProblem, Profile
+from django.contrib.auth.decorators import login_required
+
 
 
 @login_required
 def index(request):
-    report_problems = ReportProblem.objects.all()
     photos = Profile.objects.all()
-    if request.user.teacher:
-        reports = Report.objects.all()
-        return render(request, "grade/teacher_home.html",
-                      {'report_problems': report_problems,
-                       'reports': reports,
-                       'photos': photos})
+
+    # teacher's page
+    if request.user.is_teacher:
+        report_problems = ReportProblem.objects.order_by('deadline')
+        reports = Report.objects.order_by('-created_datetime')
+        return render(request, "grade/teacher_home.html", {
+            'report_problems': report_problems,
+            'reports': reports,
+            'photos': photos
+        })
+
+    # student's page
     else:
+        # ReportProblems' id that the student have already submitted a report
+        submitted_problem_id = Report.objects.values_list(
+            "report_problem_id", flat=True).filter(student=request.user)
+
+        # ReportProblems that the student have already submitted a report
+        submitted_problems = ReportProblem.objects.filter(
+            id__in=submitted_problem_id).order_by('deadline')
+
+        # ReportProblems that the student have not submitted a report yet
+        not_submitted_problems = ReportProblem.objects.exclude(
+            id__in=submitted_problem_id).order_by('deadline')
+
         grade = Grade.objects.filter(user=request.user).first()
-        return render(request, "grade/student_home.html",
-                      {'report_problems': report_problems,
-                       'grade': grade,
-                       'photos': photos})
+        reports = Report.objects.filter(student=request.user).order_by(
+            '-created_datetime')
+
+        return render(request, "grade/student_home.html", {
+            'grade': grade,
+            'reports': reports,
+            'submitted_problems': submitted_problems,
+            'not_submitted_problems': not_submitted_problems,
+            'photos': photos
+        })
 
 
 def signup(request):
@@ -49,82 +76,6 @@ def signup(request):
     return render(request, "grade/signup.html", {"form": form})
 
 
-def new_grade(request, user_id):
-    user = get_object_or_404(CustomUser, id=user_id)
-    if request.method == "POST":
-        form = GradeForm(request.POST)
-        if form.is_valid():
-            grade = form.save(commit=False)
-            grade.user = user
-            grade.gpa = (grade.english + grade.math + grade.japanese) / 3
-            grade.save()
-            messages.success(request, "成績を保存しました")
-            return redirect("grade:index")
-    else:
-        form = GradeForm()
-    return render(request, "grade/new_grade.html",
-                  {"form": form, "user": user})
-
-
-def update_grade(request, user_id):
-    user = get_object_or_404(CustomUser, id=user_id)
-    grade = get_object_or_404(Grade, user=user)
-    if request.method == "POST":
-        form = GradeForm(request.POST, instance=grade)
-        if form.is_valid():
-            grade = form.save(commit=False)
-            grade.gpa = (grade.english + grade.math + grade.japanese) / 3
-            grade.save()
-            messages.success(request, "成績を保存しました")
-            return redirect("grade:index")
-    else:
-        form = GradeForm(instance=grade)
-    return render(request, "grade/update_grade.html",
-                  {"form": form, "user": user})
-
-
-def show_grade(request):
-    students = CustomUser.objects.filter(teacher=False)
-    avg_english = Grade.objects.aggregate(Avg('english'))
-    avg_math = Grade.objects.aggregate(Avg('math'))
-    avg_japanese = Grade.objects.aggregate(Avg('japanese'))
-    return render(request, "grade/show_grade.html",
-                  {"students": students,
-                   "avg_english": avg_english["english__avg"],
-                   "avg_math": avg_math["math__avg"],
-                   "avg_japanese": avg_japanese["japanese__avg"]})
-
-
-def new_report_problem(request):
-    if request.method == "POST":
-        form = ReportProblemForm(request.POST)
-        if form.is_valid():
-            report_problem = form.save(commit=False)
-            report_problem.teacher = request.user
-            report_problem.save()
-            messages.success(request, "レポート課題を作成しました")
-            return redirect("grade:index")
-    else:
-        form = ReportProblemForm()
-    return render(request, "grade/new_report_problem.html", {"form": form})
-
-
-def new_report(request, report_problem_id):
-    report_problem = get_object_or_404(ReportProblem, id=report_problem_id)
-    if request.method == "POST":
-        form = ReportForm(request.POST, request.FILES)
-        if form.is_valid():
-            report = form.save(commit=False)
-            report.report_problem = report_problem
-            report.student = request.user
-            report.save()
-            messages.success(request, "レポートを提出しました")
-            return redirect("grade:index")
-    else:
-        form = ReportForm()
-    return render(request, "grade/new_report.html", {"report_problem": report_problem, "form": form})
-
-
 def new_board(request):
     if request.method == "POST":
         form = BoardForm(request.POST)
@@ -138,7 +89,8 @@ def new_board(request):
     else:
         form = BoardForm()
         boards = Board.objects.all()
-    return render(request, "grade/new_board.html", {"form": form, "boards": boards})
+    return render(request, "grade/new_board.html",
+                  {"form": form, "boards": boards})
 
 
 def delete_board(request, board_id):
@@ -160,7 +112,8 @@ def new_profile(request):
             return redirect("grade:index")
     else:
         form = ProfileForm()
-    return render(request, "grade/new_profile.html", {"form": form, "photos": photos})
+    return render(request, "grade/new_profile.html",
+                  {"form": form, "photos": photos})
 
 
 def update_profile(request):
@@ -181,3 +134,4 @@ def update_profile(request):
 class BoardViewSet(viewsets.ModelViewSet):
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
+

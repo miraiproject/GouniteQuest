@@ -1,11 +1,7 @@
 from django.contrib import admin
-from grade.models import Grade
-from grade.models import Report
-from grade.models import ReportProblem
-from grade.models import Profile
+from .models import Grade, Report, ReportProblem, Profile, CustomUser
 from django.contrib.auth.admin import UserAdmin
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from .models import CustomUser
 
 
 class GradeAdmin(admin.ModelAdmin):
@@ -19,7 +15,7 @@ class ReportProblemAdmin(admin.ModelAdmin):
 
 
 class ReportAdmin(admin.ModelAdmin):
-    list_display = ('id', 'student', 'report_problem')
+    list_display = ('id', 'student', 'report_problem', 'created_datetime')
     list_display_links = ('id', 'student')
 
 
@@ -32,14 +28,18 @@ class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = CustomUser
-    list_display = ['username', 'teacher']
+    list_display = ['username', 'is_teacher']
+
+    # fields of edit CustomUser form
     fieldsets = (
-        (None, {'fields': ('username', 'teacher')}),
+        (None, {'fields': ('username', 'is_teacher')}),
     )
+
+    # fields of create CustomUser form
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'password1', 'password2', 'teacher'),
+            'fields': ('username', 'password1', 'password2', 'is_teacher'),
         }),
     )
 
