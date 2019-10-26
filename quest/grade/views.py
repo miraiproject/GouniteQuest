@@ -8,11 +8,10 @@ from django.db.models import Avg
 import django_filters
 from rest_framework import viewsets, filters
 from .models import Board
-from .serializers import BoardSerializer
+from .serializers import BoardSerializer, GradeSerializer
 from .forms import BoardForm, ProfileForm, CustomUserCreationForm
 from .models import Board, Grade, Report, ReportProblem, Profile
 from django.contrib.auth.decorators import login_required
-
 
 
 @login_required
@@ -134,4 +133,9 @@ def update_profile(request):
 class BoardViewSet(viewsets.ModelViewSet):
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
+
+
+class GradeViewSet(viewsets.ModelViewSet):
+    queryset = Grade.objects.all()
+    serializer_class = GradeSerializer
 
