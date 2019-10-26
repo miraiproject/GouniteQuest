@@ -82,13 +82,13 @@ def new_board(request):
         if form.is_valid():
             topic = form.save(commit=False)
             topic.user = request.user
-            boards = Board.objects.all()
+            boards = Board.objects.order_by('-date')
             topic.save()
             messages.success(request, "コメントを追加しました。")
             return redirect("grade:new_board")
     else:
         form = BoardForm()
-        boards = Board.objects.all()
+        boards = Board.objects.order_by('-date')
     return render(request, "grade/new_board.html",
                   {"form": form, "boards": boards})
 
